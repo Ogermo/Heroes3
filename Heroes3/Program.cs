@@ -26,16 +26,10 @@ using Heroes3;
         BattleUnitStack STACK = new BattleUnitStack(new UnitStack("ANGEL" , 365));
         BattleArmy ARMY = new BattleArmy(ss);
         ARMY.Add(STACK);
-        STACK.curHitPoints = 365;
         ARMY.Add(STACK);
 
-        STACK.curDefence = 900;
         ARMY.Add(STACK);
-        (ARMY.Description[0]).curDefence = 666;
         Battle GAME = new Battle(ss, ss);
-        STACK.curDefence = 900;
-        GAME.BLUE.Description[0].curInitiative = 999;
-        GAME.RED.Description[0].curHitPoints = 5000;
         int b = 7;
         GAME.SaveBLUE.Description.RemoveAt(0);
 
