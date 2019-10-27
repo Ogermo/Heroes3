@@ -1,0 +1,77 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+class BattleArmy
+{
+    public List<BattleUnitStack> Description = new List<BattleUnitStack>();
+    public BattleArmy(ArmyClass CrusadeArmy)
+    {
+        foreach (UnitStack u in CrusadeArmy.Description)
+        {
+            Add(new BattleUnitStack(u));
+        }
+    }
+
+    public string Add(BattleUnitStack NewStack)
+    {
+        if (Description.Count() == 9)
+        {
+            return ("Full Army already");
+        }
+        Description.Insert(Description.Count(), NewStack);
+
+        return ($"{NewStack.minion.Type} : {NewStack.BasicAmount} was added");
+    }
+
+    public bool IsDead(BattleUnitStack Health)
+    {
+        if (Health.curHitPoints <= 0)
+            {
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
+    public void RemoveDead() // should be summoned after each attack
+    {
+        Description.RemoveAll(IsDead);
+    }
+
+    public bool IsDefeated()
+    {
+        if (Description.Count() == 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public void Surrender()
+    {
+        Description.Clear();
+    }
+
+    public string ShowMyArmy()
+    {
+            string ArmyShow = "";
+            foreach (BattleUnitStack u in Description)
+            {
+                ArmyShow = ArmyShow + $"///{u.minion.Type} : {u.BasicAmount}///\n" +
+                    $"{u.ShowBattleStats()}\n";
+            }
+            if (ArmyShow == "")
+            {
+                return ("Empty army");
+            }
+            else
+            {
+                return ArmyShow;
+            }
+        }
+    }
