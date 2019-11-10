@@ -30,5 +30,8 @@ using Heroes3;
         {
             Console.WriteLine(u.ShowBattleStats());
         }*/
+        Console.WriteLine(NEWss.Show());
+        Console.WriteLine(ss.Show());
+
     }
 }

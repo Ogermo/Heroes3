@@ -21,6 +21,11 @@ class BattleUnitStack
     public int counter { get; protected set; }
     public int isDefend { get; protected set; }
     public int isWaited { get; protected set; }
+    public int Spell { get; protected set; }
+    public void setSpell(int set)
+    {
+        Spell = set;
+    }
     public void setIsWaited(int set)
     {
         isWaited = set;

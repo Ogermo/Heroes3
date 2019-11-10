@@ -55,6 +55,7 @@ class Battle
             u.setSide("BLUE");
             u.setCounter(1);
             u.setIsWaited(0);
+            u.setSpell(1);
         }
         RED = new BattleArmy(initRED);
         foreach (BattleUnitStack u in RED.Description)
@@ -64,6 +65,7 @@ class Battle
             u.setSide("RED");
             u.setCounter(1);
             u.setIsWaited(0);
+            u.setSpell(1);
         }
         SaveBLUE = initBLUE;
         SaveRED = initRED;
@@ -71,6 +73,7 @@ class Battle
         ArmyQueue.AddRange(RED.Description);
         ArmyQueue.Sort(Compare);
         GameLoop();
+        ChangeArmies();
     }
 
     public void ShowInfo()
@@ -186,6 +189,16 @@ class Battle
                             RED.RemoveDead();
                             break;
                         case "2":
+                            if (curStack.Spell == 0)
+                            {
+                                break;
+                            }
+                            curStack.setSpell(0);
+                            // use spell
+                            input = true;
+                            curStack.changeQueueInitiative(-900);
+                            BLUE.RemoveDead();
+                            RED.RemoveDead();
                             break;
                             input = true;
                             break;
@@ -278,17 +291,33 @@ class Battle
                 //ShowInfo();
                 //break; // will be summoned when fight is over
             }
-            ChangeArmies();
             return;
         }
 
 
         void ChangeArmies()
         {
-            Console.WriteLine("ARMY CHANGED");
-            //first it will write losses
-            //there CrusadeArmies will be changed
+        SaveBLUE.Description.Clear();
+        foreach (BattleUnitStack u in BLUE.Description)
+        {
+            double Alive = (double)u.curHitPoints / u.minion.HitPoints;
+            int add = (int)Math.Ceiling(Alive);
+            string type = $"{u.minion.Type}";
+            SaveBLUE.Add(type, add);
         }
+
+        SaveRED.Description.Clear();
+        foreach (BattleUnitStack u in RED.Description)
+        {
+            double Alive = (double)u.curHitPoints / u.minion.HitPoints;
+            int add = (int)Math.Ceiling(Alive);
+            string type = $"{u.minion.Type}";
+            SaveRED.Add(type, add);
+        }
+        //first it will write losses
+        //there CrusadeArmies will be changed
+        Console.WriteLine("ARMY CHANGED");
+    }
 
 
     }
