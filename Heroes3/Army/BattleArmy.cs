@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 class BattleArmy
 {
     public List<BattleUnitStack> Description = new List<BattleUnitStack>();
+
     public BattleArmy(ArmyClass CrusadeArmy)
     {
         foreach (UnitStack u in CrusadeArmy.Description)
@@ -15,15 +16,15 @@ class BattleArmy
         }
     }
 
-    public string Add(BattleUnitStack NewStack)
+    public int Add(BattleUnitStack NewStack)
     {
         if (Description.Count() == 9)
         {
-            return ("Full Army already");
+            return 0;
         }
         Description.Insert(Description.Count(), NewStack);
 
-        return ($"{NewStack.minion.Type} : {NewStack.BasicAmount} was added");
+        return 1;
     }
 
     public bool IsDead(BattleUnitStack Health)

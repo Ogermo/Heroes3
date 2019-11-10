@@ -13,6 +13,41 @@ class BattleUnitStack
 
     public int BasicAmount { get; protected set; }
     public Unit minion { get; protected set; }
+    
+    //battle stuff
+    public int ID { get; protected set; }
+    public double queueInitiative { get; private set; }
+    public string Side { get; protected set; }
+    public int counter { get; protected set; }
+    public int isDefend { get; protected set; }
+    public int isWaited { get; protected set; }
+    public void setIsWaited(int set)
+    {
+        isWaited = set;
+    }
+    public void setCounter(int set)
+    {
+        counter = set;
+    }
+    public void setIsDefend(int set)
+    {
+        isDefend = set;
+    }
+    public void setID(int set)
+    {
+        ID = set;
+        set = set + 1;
+    }
+    public void setSide(string side)
+    {
+        Side = side;
+    }
+
+    public void changeQueueInitiative(double set)
+    {
+        queueInitiative = set;
+    }
+    //battle stuff
 
     public BattleUnitStack(UnitStack CrusadeStack)
     {
@@ -22,6 +57,7 @@ class BattleUnitStack
         curAttack = CrusadeStack.minion.Attack;
         curDefence = CrusadeStack.minion.Defence;
         curInitiative = CrusadeStack.minion.Initiative;
+        queueInitiative = curInitiative;
     }
     public bool IsDead()
     {
@@ -78,12 +114,13 @@ class BattleUnitStack
         double Alive = (double)curHitPoints / minion.HitPoints;
         Alive = Math.Ceiling(Alive);
 
-        stats = $"Name: {minion.Type}\n" +
+        stats = $"ID: {ID}\n" +
+    $"Name: {minion.Type}\n" +
     $"Amount: {Alive}\\{BasicAmount} HP: {curHitPoints - ((Alive-1)*minion.HitPoints)}\\{minion.HitPoints}\n" +
-    $"Attack: {curAttack}\n" +
+    $"Attack: {minion.Attack} ({curAttack}) \n" +
     $"Damage: {minion.MinDamage} - {minion.MaxDamage}\n" +
-    $"Defence: {curDefence}\n" +
-    $"Initiative: {curInitiative}\n";
+    $"Defence: {minion.Defence} ({curDefence})\n" +
+    $"Initiative: {minion.Initiative} ({curInitiative})\n";
 
         return stats;
     }

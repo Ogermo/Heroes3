@@ -16,22 +16,19 @@ using Heroes3;
         /*Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
         Application.Run(new Form1());*/
-        List<UnitStack> stack = new List<UnitStack> { new UnitStack("ANGEL", 999), new UnitStack("ANGEL", 965), new UnitStack("ANGEL", 98),
-         new UnitStack("ANGEL", 999), new UnitStack("ANGEL", 965)};
+        List<UnitStack> stack = new List<UnitStack> {
+         new UnitStack("SHAMAN", 999), new UnitStack("SKELETON", 965)};
+        List<UnitStack> NEWstack = new List<UnitStack> { new UnitStack("HYDRA", 999), new UnitStack("ANGEL", 965), new UnitStack("DEVIL", 98)};
 
         ArmyClass ss = new ArmyClass(stack);
-        Angel super = new Angel();
-    
+        ArmyClass NEWss = new ArmyClass(NEWstack);
 
-        BattleUnitStack STACK = new BattleUnitStack(new UnitStack("ANGEL" , 365));
-        BattleArmy ARMY = new BattleArmy(ss);
-        ARMY.Add(STACK);
-        ARMY.Add(STACK);
-
-        ARMY.Add(STACK);
-        Battle GAME = new Battle(ss, ss);
+        Battle GAME = new Battle(NEWss, ss);
         int b = 7;
-        GAME.SaveBLUE.Description.RemoveAt(0);
-
+        //GAME.ShowInfo();
+        /*    foreach (BattleUnitStack u in GAME.ArmyQueue)
+        {
+            Console.WriteLine(u.ShowBattleStats());
+        }*/
     }
 }
