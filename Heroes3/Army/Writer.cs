@@ -20,6 +20,7 @@ class Writer
     }
     public void MainInfo(List<BattleUnitStack> queue,BattleArmy BLUE,BattleArmy RED)
     {
+        Console.Clear();
         int BLUEcount = BLUE.Description.Count;
         int REDcount = RED.Description.Count;
         int max = Math.Max(BLUEcount,REDcount);
@@ -74,12 +75,33 @@ class Writer
         {
             Console.WriteLine("Choose ally target");
         }
-        if (side == "any")
+        if (side == "spell")
         {
-            Console.WriteLine("Choose any target");
+            Console.WriteLine("Choose spell target. If there is no valid target, write \"quit\" and lose your turn");
         }
     }
 
+    // battlestats
+    public void Show(BattleUnitStack target)
+    {
+        string stats = "";
+        double Alive = (double)target.curHitPoints / target.minion.HitPoints;
+        Alive = Math.Ceiling(Alive);
+
+        stats = $"ID: {target.ID}\n" +
+    $"Name: {target.minion.Type}\n" +
+    $"Amount: {Alive}\\{target.BasicAmount} HP: {target.curHitPoints - ((Alive - 1) * target.minion.HitPoints)}\\{target.minion.HitPoints}\n" +
+    $"Attack: {target.minion.Attack} ({target.curAttack}) \n" +
+    $"Damage: {target.minion.MinDamage} - {target.minion.MaxDamage}\n" +
+    $"Defence: {target.minion.Defence} ({target.curDefence})\n" +
+    $"Initiative: {target.minion.Initiative} ({target.curInitiative})\n" +
+    $"Description:\n" +
+    $"{target.minion.Description}\n";
+
+        Console.WriteLine(stats);
+    }
+
+    //queue
     public void ShowQueue(List<BattleUnitStack> queue)
     {
         int first = 1;
@@ -115,5 +137,80 @@ class Writer
             }
         }
         Console.WriteLine();
+    }
+
+    //unit
+    public void Show(Unit u)
+    {
+        string stats;
+        stats = $"Name: {u.Type}\n" +
+            $"HP: {u.HitPoints}\n" +
+            $"Attack: {u.Attack}\n" +
+            $"Damage: {u.MinDamage} - {u.MaxDamage}\n" +
+            $"Defence: {u.Defence}\n" +
+            $"Initiative: {u.Initiative}\n";
+        Console.WriteLine(stats);
+    }
+    //Army
+    public void Show(ArmyClass army)
+    {
+        string ArmyShow = "";
+        foreach (UnitStack u in army.Description)
+        {
+            //unit
+            string stats;
+            stats = $"Name: {u.minion.Type}\n" +
+                $"HP: {u.minion.HitPoints}\n" +
+                $"Attack: {u.minion.Attack}\n" +
+                $"Damage: {u.minion.MinDamage} - {u.minion.MaxDamage}\n" +
+                $"Defence: {u.minion.Defence}\n" +
+                $"Initiative: {u.minion.Initiative}\n";
+            //
+            ArmyShow = ArmyShow + $"///{u.minion.Type} : {u.Amount}///\n" +
+                $"{stats}\n";
+        }
+        if (ArmyShow == "")
+        {
+            Console.WriteLine("Empty army");
+        }
+        else
+        {
+            Console.WriteLine(ArmyShow);
+        }
+    }
+
+    //many battlestats
+    public void Show(BattleArmy barmy)
+    {
+            string ArmyShow = "";
+            foreach (BattleUnitStack u in barmy.Description)
+            {
+            //battlestat
+            string stats = "";
+            double Alive = (double)u.curHitPoints / u.minion.HitPoints;
+            Alive = Math.Ceiling(Alive);
+
+            stats = $"ID: {u.ID}\n" +
+        $"Name: {u.minion.Type}\n" +
+        $"Amount: {Alive}\\{u.BasicAmount} HP: {u.curHitPoints - ((Alive - 1) * u.minion.HitPoints)}\\{u.minion.HitPoints}\n" +
+        $"Attack: {u.minion.Attack} ({u.curAttack}) \n" +
+        $"Damage: {u.minion.MinDamage} - {u.minion.MaxDamage}\n" +
+        $"Defence: {u.minion.Defence} ({u.curDefence})\n" +
+        $"Initiative: {u.minion.Initiative} ({u.curInitiative})\n" +
+        $"Description:\n" +
+        $"{u.minion.Description}\n";
+            //
+
+            ArmyShow = ArmyShow + $"///{u.minion.Type} : {u.BasicAmount}///\n" +
+                    $"{stats}\n";
+            }
+            if (ArmyShow == "")
+            {
+                Console.WriteLine("Empty army");
+            }
+            else
+            {
+                Console.WriteLine(ArmyShow);
+            }
     }
 }

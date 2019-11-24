@@ -13,12 +13,13 @@ using Heroes3;
     [STAThread]
     static void Main()
     {
+        Writer writer = new Writer();
         /*Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
         Application.Run(new Form1());*/
         List<UnitStack> stack = new List<UnitStack> {
-         new UnitStack("SHAMAN", 999), new UnitStack("SKELETON", 965)};
-        List<UnitStack> NEWstack = new List<UnitStack> { new UnitStack("HYDRA", 999), new UnitStack("ANGEL", 965), new UnitStack("DEVIL", 98)};
+         new UnitStack("ARBALET", 999), new UnitStack("HYDRA", 99999)};
+        List<UnitStack> NEWstack = new List<UnitStack> { new UnitStack("GRYPHONE", 999), new UnitStack("ANGEL", 965), new UnitStack("DEVIL", 98)};
 
         ArmyClass ss = new ArmyClass(stack);
         ArmyClass NEWss = new ArmyClass(NEWstack);
@@ -30,8 +31,7 @@ using Heroes3;
         {
             Console.WriteLine(u.ShowBattleStats());
         }*/
-        Console.WriteLine(NEWss.Show());
-        Console.WriteLine(ss.Show());
-
+        writer.Show(NEWss);
+        writer.Show(ss);
     }
 }

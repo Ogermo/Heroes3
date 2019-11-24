@@ -53,9 +53,11 @@
     <Compile Include="Army\Battle.cs" />
     <Compile Include="Army\BattleArmy.cs" />
     <Compile Include="Army\BattleUnitStack.cs" />
+    <Compile Include="Army\EffectTool.cs" />
     <Compile Include="Army\Unit.cs" />
     <Compile Include="Army\UnitStack.cs" />
     <Compile Include="Army\Units\Angel.cs" />
+    <Compile Include="Army\Units\Arbalet.cs" />
     <Compile Include="Army\Units\BoneDragon.cs" />
     <Compile Include="Army\Units\Cyclope.cs" />
     <Compile Include="Army\Units\Devil.cs" />

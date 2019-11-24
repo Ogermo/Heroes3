@@ -23,11 +23,11 @@ using System.Threading.Tasks;
         Description = new List<UnitStack>(SaveArmy);
     }
 
-    public string Add(string AddType, int AddAmount)
+    public bool Add(string AddType, int AddAmount)
     {
         if (Description.Count() == 6)
         { 
-            return("Full Army already");
+            return false;
         }
         Description.Insert(Description.Count(), new UnitStack(AddType, AddAmount));
         foreach (UnitStack u in Description)
@@ -35,10 +35,10 @@ using System.Threading.Tasks;
             if (u.Amount == 0)
             {
                 Description.RemoveAt(Description.Count() - 1);
-                return("The stack is invalid and was removed");
+                return false;
             }
         }
-        return ($"{AddType} : {AddAmount} was added");
+        return true;
     }
 
         public int Size() //more comfortable to check
@@ -46,22 +46,5 @@ using System.Threading.Tasks;
             return Description.Count();
         }
 
-        public string Show()
-        {
-        string ArmyShow = "";
-           foreach (UnitStack u in Description)
-            {
-            ArmyShow = ArmyShow + $"///{u.minion.Type} : {u.Amount}///\n" +
-                $"{u.ShowStats()}\n";
-        }
-        if (ArmyShow == "")
-        {
-            return ("Empty army");
-        }
-        else
-        {
-            return ArmyShow;
-        }
-        }
 
     }

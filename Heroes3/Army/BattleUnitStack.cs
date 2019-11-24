@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 class BattleUnitStack
 {
     public int curHitPoints { get; private set; }
-    public int curAttack { get; private set; }
-    public int curDefence { get; private set; }
+        public int curAttack { get; private set; }
+        public int curDefence { get; private set; }
     public double curInitiative { get; private set; }
 
     public int BasicAmount { get; protected set; }
@@ -111,22 +111,5 @@ class BattleUnitStack
         {
             curInitiative = 0;
         }
-    }
-    // show stats
-    public string ShowBattleStats ()
-    {
-        string stats;
-        double Alive = (double)curHitPoints / minion.HitPoints;
-        Alive = Math.Ceiling(Alive);
-
-        stats = $"ID: {ID}\n" +
-    $"Name: {minion.Type}\n" +
-    $"Amount: {Alive}\\{BasicAmount} HP: {curHitPoints - ((Alive-1)*minion.HitPoints)}\\{minion.HitPoints}\n" +
-    $"Attack: {minion.Attack} ({curAttack}) \n" +
-    $"Damage: {minion.MinDamage} - {minion.MaxDamage}\n" +
-    $"Defence: {minion.Defence} ({curDefence})\n" +
-    $"Initiative: {minion.Initiative} ({curInitiative})\n";
-
-        return stats;
     }
 }

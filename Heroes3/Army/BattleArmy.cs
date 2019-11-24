@@ -30,9 +30,10 @@ class BattleArmy
     public bool IsDead(BattleUnitStack Health)
     {
         if (Health.curHitPoints <= 0)
-            {
+        {
             return true;
-        } else
+        }
+        else
         {
             return false;
         }
@@ -57,22 +58,4 @@ class BattleArmy
     {
         Description.Clear();
     }
-
-    public string ShowMyArmy()
-    {
-            string ArmyShow = "";
-            foreach (BattleUnitStack u in Description)
-            {
-                ArmyShow = ArmyShow + $"///{u.minion.Type} : {u.BasicAmount}///\n" +
-                    $"{u.ShowBattleStats()}\n";
-            }
-            if (ArmyShow == "")
-            {
-                return ("Empty army");
-            }
-            else
-            {
-                return ArmyShow;
-            }
-        }
-    }
+}

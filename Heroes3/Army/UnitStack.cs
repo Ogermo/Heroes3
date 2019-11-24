@@ -17,6 +17,9 @@ class UnitStack
         mobStr = mobStr.ToUpper();
         switch (mobStr)
         {
+            case "ARBALET":
+                minion = new Arbalet();
+                break;
             case "ANGEL":
                 minion = new Angel();
                 break;
@@ -61,9 +64,4 @@ class UnitStack
         }
     }
 
-
-    public string ShowStats()
-    {
-        return minion.ShowStats();
-    }
 }
