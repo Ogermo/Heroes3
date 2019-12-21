@@ -29,7 +29,7 @@ using Heroes3;
         for (int i = 0; i < 6; i++)
         {
             CorrectName = false;
-            Console.WriteLine(i);
+            Console.WriteLine($"now in army:{i} stacks");
             Console.WriteLine("Write a name of a minion or \"quit\" to end ");
             name = Console.ReadLine();
             if (name == "quit")
@@ -75,7 +75,7 @@ using Heroes3;
         for (int i = 0; i < 6; i++)
         {
             CorrectName = false;
-            Console.WriteLine(i);
+            Console.WriteLine($"now in army:{i} stacks");
             Console.WriteLine("Write a name of a minion or \"quit\" to end ");
             name = Console.ReadLine();
             if (name == "quit")
@@ -125,5 +125,6 @@ using Heroes3;
         writer.Show(BlueArmy);
         Console.WriteLine("REd army");
         writer.Show(RedArmy);
+        Console.ReadKey();
     }
 }
