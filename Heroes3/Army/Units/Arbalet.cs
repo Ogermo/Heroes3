@@ -15,6 +15,7 @@ using System.Threading.Tasks;
     {
         
         curGame.effect.Add(ID, "ACT", "EnemyNoCounter", 9999);
+        curGame.effect.Add(ID, "ACT", "Markshooter", 9999);
         curGame.effect.Add(ID, "ACTED", "NoCounter", 9999);
 
     }

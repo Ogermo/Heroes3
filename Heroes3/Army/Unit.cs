@@ -3,25 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 
-class Unit
+public class Unit
 {
-    public enum Types
-    {
-        ARBALET,
-        ANGEL,
-        BONEDRAGON,
-        CYCLOPE,
-        DEVIL,
-        FURY,
-        GRYPHONE,
-        HYDRA,
-        LICH,
-        SHAMAN,
-        SKELETON
-    }
-    public Types Type { get; private set; }
+
+    public string Type { get; private set; }
     public int HitPoints { get; private set; }
     public int Attack { get; private set; }
     public int Defence { get; private set; }
@@ -42,7 +30,7 @@ class Unit
 
     public Unit(string UnitType, int UnitHitpoints, int UnitAttack, int UnitDefence, int UnitMinDamage, int UnitMaxDamage, double UnitInitiative,int UnitHasSpell)
     {
-        Type = (Types)System.Enum.Parse(typeof(Types), UnitType);
+        Type = UnitType;
         HitPoints = UnitHitpoints;
         Attack = UnitAttack;
         Defence = UnitDefence;
@@ -53,6 +41,8 @@ class Unit
         Description = "";
         Tribe = "";
     }
+
+
 
     public virtual bool Spell(BattleUnitStack me, BattleUnitStack target) { return true; }
     public virtual bool Spell(BattleUnitStack me, BattleArmy red, BattleArmy blue) { return true; } //define your side yourself

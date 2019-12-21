@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
+using System.IO;
 
-
-class Writer
+public class Writer
 {
     public int Compare(BattleUnitStack x, BattleUnitStack y)
     {
@@ -51,8 +52,28 @@ class Writer
 
         Console.WriteLine("v - you're here");
         ShowQueue(queue);
+        Console.WriteLine("//////////LOG//////////");
+        Log log = Log.getInstance();
+        string[] lines = log.sb.ToString().Split('\n');
+       Console.WriteLine(lines[lines.Length - 4]);
+        Console.WriteLine(lines[lines.Length - 3]);
+        Console.WriteLine(lines[lines.Length - 2]);
+        Console.WriteLine("///////////////////////");
+
+
         Console.WriteLine();
 
+
+    }
+
+    public void ShowLog()
+    {
+        Log log = Log.getInstance();
+        Console.Clear();
+        Console.WriteLine("///////////////LOG///////////////");
+        Console.WriteLine(log.sb);
+        Console.WriteLine("Press any key to continue");
+        Console.ReadKey();
     }
 
     public void YourTurn(BattleUnitStack stack)
@@ -63,7 +84,8 @@ class Writer
             $"3.Wait\n" +
             $"4.Defend\n" +
             $"5.Give up\n" +
-            $"6.Show stats\n");
+            $"6.Show stats\n" +
+            $"7.Show full log\n");
     }
 
     public void Target(string side)
@@ -78,6 +100,10 @@ class Writer
         if (side == "spell")
         {
             Console.WriteLine("Choose spell target. If there is no valid target, write \"quit\" and lose your turn");
+        }
+        if (side == "any")
+        {
+            Console.WriteLine("Choose any target");
         }
     }
 
@@ -166,7 +192,7 @@ class Writer
                 $"Defence: {u.minion.Defence}\n" +
                 $"Initiative: {u.minion.Initiative}\n";
             //
-            ArmyShow = ArmyShow + $"///{u.minion.Type} : {u.Amount}///\n" +
+            ArmyShow = ArmyShow + $"///{u.minion.Type}:{u.Amount}///\n" +
                 $"{stats}\n";
         }
         if (ArmyShow == "")
@@ -201,7 +227,7 @@ class Writer
         $"{u.minion.Description}\n";
             //
 
-            ArmyShow = ArmyShow + $"///{u.minion.Type} : {u.BasicAmount}///\n" +
+            ArmyShow = ArmyShow + $"///{u.minion.Type}:{u.BasicAmount}///\n" +
                     $"{stats}\n";
             }
             if (ArmyShow == "")
@@ -212,5 +238,42 @@ class Writer
             {
                 Console.WriteLine(ArmyShow);
             }
+    }
+
+    public List<string> ListOfUnits()
+    {
+        Console.WriteLine("Choose from this units:");
+        Console.WriteLine("Base units:");
+        List<string> list = new List<string>{"Angel",
+            "Arbalet" ,
+            "BoneDragon" ,
+            "Devil" ,
+            "Fury" ,
+            "Gryphone" ,
+            "Hydra" ,
+            "Lich" ,
+            "Shaman" ,
+            "Skeleton" , };
+        foreach (string s in list)
+        {
+            Console.WriteLine(s);
+        }
+        Console.WriteLine("Mod Units:");
+        List<Assembly> allAssemblies = new List<Assembly>();
+        string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+        foreach (string dll in Directory.GetFiles(path, "*.dll"))
+            allAssemblies.Add(Assembly.LoadFile(dll));
+        foreach (Assembly ass in allAssemblies)
+        {
+            Type[] types = ass.GetTypes();
+            foreach (Type tc in types)
+
+            {
+                list.Add(tc.Name);
+                Console.WriteLine(tc.Name);
+            }
+        }
+        return list;
     }
 }

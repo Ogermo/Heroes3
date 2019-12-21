@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-class Battle
+public class Battle
 {
     Writer writer = new Writer(); //operrator
     Random random = new Random(); //randomizer
@@ -53,6 +53,8 @@ class Battle
 
     public Battle(ArmyClass initBLUE, ArmyClass initRED)
     {
+        Log log = Log.getInstance();
+        log.sb.AppendLine($"Begin construction of battle");
         BLUE = new BattleArmy(initBLUE);
         foreach (BattleUnitStack u in BLUE.Description)
         {
@@ -63,6 +65,8 @@ class Battle
             u.setIsWaited(0);
             u.setSpell(u.minion.HasSpell);
         }
+        log.sb.AppendLine($"Blue army created");
+
         RED = new BattleArmy(initRED);
         foreach (BattleUnitStack u in RED.Description)
         {
@@ -73,13 +77,16 @@ class Battle
             u.setIsWaited(0);
             u.setSpell(u.minion.HasSpell);
         }
+        log.sb.AppendLine($"Red army created");
         SaveBLUE = initBLUE;
         SaveRED = initRED;
         ArmyQueue.AddRange(BLUE.Description);
         ArmyQueue.AddRange(RED.Description);
         ArmyQueue.Sort(Compare);
         effect = new EffectTool(ArmyQueue,this);
+        log.sb.AppendLine($"Start game loop");
         GameLoop();
+        log.sb.AppendLine($"Change armies");
         ChangeArmies();
     }
 
@@ -127,7 +134,9 @@ class Battle
             defender.changeHealth(-damage);
             if ((defender.curHitPoints != 0) && (defender.counter != 0)) //counter
             {
-                Alive = (double)defender.curHitPoints / defender.minion.HitPoints;
+            Log log = Log.getInstance();
+            log.sb.AppendLine($"{defender.ID}:{defender.minion.Type} counter attack");
+            Alive = (double)defender.curHitPoints / defender.minion.HitPoints;
                 Alive = Math.Ceiling(Alive);
                 if (defender.curAttack >= attacker.curDefence)
                 {
@@ -148,15 +157,18 @@ class Battle
 
     public void GameLoop()
     {
+        Log log = Log.getInstance();
         bool input;
         string action;
         string winner = "";
         //Add passives
+        log.sb.AppendLine($"Apply passives");
         foreach (BattleUnitStack u in ArmyQueue)
         {
             u.minion.PassiveEffect(this,u.ID);
             effect.Act(u.ID, 0);    
         }
+        log.sb.AppendLine($"BATTLE BEGIN");
         while (true)
         {
             effect.TimerDown();
@@ -183,6 +195,7 @@ class Battle
                         case "1":
                             input = false;
                             writer.Target("enemy");
+                            log.sb.AppendLine($"{curStack.ID}:{curStack.minion.Type} attack");
                             while (!input)
                             {
                                 action = Console.ReadLine();
@@ -216,20 +229,20 @@ class Battle
                             effect.Act(curStack.ID,3);
                             effect.Act(ArmyQueue.Find(Find).ID,4);
 
-                            if (effect.replacedAttack = false)
+                            if (effect.replacedAttack == false)
                             {
                                 attack(curStack, ArmyQueue.Find(Find));
                             }
 
-                            if (effect.restoreAttack = true)
-                            {
-                                ArmyQueue.Find(Find).setCounter(Hypercounter);
-                            }
-                            if (effect.restoreCounter = true)
+                            if (effect.restoreAttack == true)
                             {
                                 ArmyQueue.Find(Find).changeAttack(HypercurAttack - ArmyQueue.Find(Find).curAttack);
                             }
-                            if (effect.restoreDefence = true)
+                            if (effect.restoreCounter == true)
+                            {
+                                ArmyQueue.Find(Find).setCounter(Hypercounter);
+                            }
+                            if (effect.restoreDefence == true)
                             {
                                 ArmyQueue.Find(Find).changeDefence(HypercurDefence - ArmyQueue.Find(Find).curDefence);
                             }
@@ -240,13 +253,17 @@ class Battle
                             BLUE.RemoveDead();
                             RED.RemoveDead();
                             break;
+
+
                         case "2":
                             if (curStack.Spell == 0)
                             {
                                 break;
                             }
+                            input = true;
                             curStack.setSpell(0);
                             bool act = false;
+                            log.sb.AppendLine($"{curStack.ID}:{curStack.minion.Type} use spell");
                             writer.Target("spell");
                             if ($"{curStack.minion.SpellType}" == "UNIT")
                             {
@@ -274,6 +291,7 @@ class Battle
                                     }
                                     if (action == "quit")
                                     {
+                                        log.sb.AppendLine($"{curStack.ID}:{curStack.minion.Type} actually not using a spell and just quit");
                                         curStack.changeQueueInitiative(-900);
                                         BLUE.RemoveDead();
                                         RED.RemoveDead();
@@ -284,7 +302,7 @@ class Battle
                             }
                             else if ($"{curStack.minion.SpellType}" == "SIDE")
                             {
-                                curStack.minion.Spell(curStack, BLUE, RED);
+                                curStack.minion.Spell(curStack, RED, BLUE);
                             }
                             else if ($"{curStack.minion.SpellType}" == "ALL")
                             {
@@ -303,9 +321,11 @@ class Battle
                             }
                             input = true;
                             curStack.changeQueueInitiative(reverse);
+                            log.sb.AppendLine($"{curStack.ID}:{curStack.minion.Type} is waiting");
                             reverse = reverse + 1;
                             break;
                         case "4":
+                            log.sb.AppendLine($"{curStack.ID}:{curStack.minion.Type} is defending");
                             curStack.setIsDefend(1);
                             curStack.changeQueueInitiative(-900);
                             input = true;
@@ -314,10 +334,12 @@ class Battle
                             input = true;
                             if (curStack.Side == "RED")
                             {
+                                log.sb.AppendLine("RED GIVE UP");
                                 winner = "BLUE";
                             }
                             else
                             {
+                                log.sb.AppendLine("BLUE GIVE UP");
                                 winner = "RED";
                             }
                             break;
@@ -341,6 +363,12 @@ class Battle
                             writer.MainInfo(ArmyQueue, BLUE, RED);
                             writer.YourTurn(curStack);
                             writer.Show(ArmyQueue.Find(Find));
+                            input = false;
+                            break;
+                        case "7":
+                            writer.ShowLog();
+                            writer.MainInfo(ArmyQueue, BLUE, RED);
+                            writer.YourTurn(curStack);
                             input = false;
                             break;
                         default:
@@ -370,9 +398,11 @@ class Battle
             if (winner != "")
             {
                 Console.WriteLine($"WINNER IS {winner}");
+                log.sb.AppendLine($"WINNER IS {winner}");
                 break;
             }
-                Console.WriteLine("///////////////////END OF TURN///////////////////");
+
+            log.sb.AppendLine("END OF TURN");
                 // end of turn
                 foreach (BattleUnitStack u in ArmyQueue)
                 {
@@ -394,6 +424,7 @@ class Battle
 
         void ChangeArmies()
         {
+        Log log = Log.getInstance();
         SaveBLUE.Description.Clear();
         foreach (BattleUnitStack u in BLUE.Description)
         {
@@ -402,7 +433,7 @@ class Battle
             string type = $"{u.minion.Type}";
             SaveBLUE.Add(type, add);
         }
-
+        log.sb.AppendLine($"Blue army changed");
         SaveRED.Description.Clear();
         foreach (BattleUnitStack u in RED.Description)
         {
@@ -411,9 +442,8 @@ class Battle
             string type = $"{u.minion.Type}";
             SaveRED.Add(type, add);
         }
-        //first it will write losses
-        //there CrusadeArmies will be changed
-        Console.WriteLine("ARMY CHANGED");
+        log.sb.AppendLine($"Red army changed");
+
     }
 
 

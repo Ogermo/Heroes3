@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-    class ArmyClass
+public class ArmyClass
     {
     public readonly List<UnitStack> Description = new List<UnitStack>();
 

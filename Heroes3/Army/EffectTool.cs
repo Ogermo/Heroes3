@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-    class EffectTool
+public class EffectTool
 {
     Random random = new Random(); //randomizer
 
@@ -84,6 +84,7 @@ using System.Threading.Tasks;
 
     public void Act(int IDtarget, int curCondition)
     {
+        Log log = Log.getInstance();
         BattleUnitStack target = null;
         foreach(BattleUnitStack u in Queue)
         {
@@ -106,6 +107,11 @@ using System.Threading.Tasks;
                     restoreCounter = true;
                     target.setCounter(0);
                 }
+                if (u.EffectName == "Markshooter")
+                {
+                    restoreDefence = true;
+                    battle.ArmyQueue.Find(battle.Find).changeDefence(-battle.ArmyQueue.Find(battle.Find).curDefence);
+                }
                 if (u.EffectName == "EnemyNoCounter")
                 {
                     restoreCounter = true;
@@ -113,7 +119,9 @@ using System.Threading.Tasks;
                 }
                 if (u.EffectName == "AOE")
                 {
+                    log.sb.AppendLine("It's AOE damage!");
                     replacedAttack = true;
+                    
                     /////////////////////////////////////////////////////////
                     foreach (BattleUnitStack stack in battle.ArmyQueue)
                     {

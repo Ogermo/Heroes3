@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-class BattleUnitStack
+public class BattleUnitStack
 {
     public int curHitPoints { get; private set; }
         public int curAttack { get; private set; }
@@ -78,6 +78,9 @@ class BattleUnitStack
     //apply changes to stats (heal/attack, buff/debuff)
     public void changeHealth(int Health) //+healed -damaged
     {
+        double wasAlive = (double)curHitPoints / minion.HitPoints;
+        wasAlive = Math.Ceiling(wasAlive);
+
         curHitPoints = curHitPoints + Health;
         if (curHitPoints <= 0)
         {
@@ -87,22 +90,47 @@ class BattleUnitStack
         {
             curHitPoints = minion.HitPoints * BasicAmount;
         }
+
+        double nowAlive = (double)curHitPoints / minion.HitPoints;
+        nowAlive = Math.Ceiling(nowAlive);
+
+        if (Health > 0)
+        {
+            Log log = Log.getInstance();
+            log.sb.AppendLine($"{ID}:{minion.Type} get healed on {Health} HP; You resurected {nowAlive - wasAlive}; You now have {nowAlive}");
+
+        }
+        else
+        {
+            Log log = Log.getInstance();
+            log.sb.AppendLine($"{ID}:{minion.Type} take {-Health} damage; You lost {wasAlive - nowAlive} minions; You now have {nowAlive}");
+            if (nowAlive == 0)
+            {
+                log.sb.AppendLine($"{ID}:{minion.Type} died");
+            }
+        }
     }
     public void changeAttack(int attack)
     {
+
         curAttack = curAttack + attack;
         if (curAttack < 0)
         {
             curAttack = 0;
         }
+        Log log = Log.getInstance();
+        log.sb.AppendLine($"{ID}:{minion.Type} get {attack} attack; current attack = {curAttack}");
     }
     public void changeDefence(int defence)
     {
+
         curDefence = curDefence + defence;
         if (curDefence < 0)
         {
             curDefence = 0;
         }
+        Log log = Log.getInstance();
+        log.sb.AppendLine($"{ID}:{minion.Type} get {defence} defence; current defence = {curDefence}");
     }
     public void changeInitiative(double initiative)
     {
@@ -111,5 +139,7 @@ class BattleUnitStack
         {
             curInitiative = 0;
         }
+        Log log = Log.getInstance();
+        log.sb.AppendLine($"{ID}:{minion.Type} get {initiative} initiative; current initiative = {curInitiative}");
     }
 }

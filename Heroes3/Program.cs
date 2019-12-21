@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Reflection;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -7,31 +10,120 @@ using Heroes3;
 
         static class Program
         {
-    /// <summary>
-    /// Главная точка входа для приложения.
-    /// </summary>
-    [STAThread]
+
     static void Main()
     {
+
+        Log log = Log.getInstance();
+
+        string name;
+        int number;
+        string StrNumber;
         Writer writer = new Writer();
-        /*Application.EnableVisualStyles();
-        Application.SetCompatibleTextRenderingDefault(false);
-        Application.Run(new Form1());*/
-        List<UnitStack> stack = new List<UnitStack> {
-         new UnitStack("ARBALET", 999), new UnitStack("HYDRA", 99999)};
-        List<UnitStack> NEWstack = new List<UnitStack> { new UnitStack("GRYPHONE", 999), new UnitStack("ANGEL", 965), new UnitStack("DEVIL", 98)};
-
-        ArmyClass ss = new ArmyClass(stack);
-        ArmyClass NEWss = new ArmyClass(NEWstack);
-
-        Battle GAME = new Battle(NEWss, ss);
-        int b = 7;
-        //GAME.ShowInfo();
-        /*    foreach (BattleUnitStack u in GAME.ArmyQueue)
+        List<string> list = writer.ListOfUnits();
+        bool isNumeric;
+        bool CorrectName;
+        log.sb.AppendLine("Initialise units");
+        List<UnitStack> BlueStack = new List<UnitStack>();
+        Console.WriteLine("Blue, make an army");
+        for (int i = 0; i < 6; i++)
         {
-            Console.WriteLine(u.ShowBattleStats());
-        }*/
-        writer.Show(NEWss);
-        writer.Show(ss);
+            CorrectName = false;
+            Console.WriteLine(i);
+            Console.WriteLine("Write a name of a minion or \"quit\" to end ");
+            name = Console.ReadLine();
+            if (name == "quit")
+            {
+                if (i == 0)
+                {
+                    Console.WriteLine("Please, at least 1 stack");
+                    i = i - 1;
+                    continue;
+                }
+                break;
+            }
+
+            foreach (string s in list)
+            {
+                if (s.ToUpper() == name.ToUpper())
+                {
+                    CorrectName = true;
+                }
+            }
+            if (CorrectName == false)
+            {
+                Console.WriteLine("Incorrect name, plase try again");
+                i = i - 1;
+                continue;
+            }
+            Console.WriteLine("Now write amount");
+            StrNumber = Console.ReadLine();
+            isNumeric = int.TryParse(StrNumber, out number);
+            if ((number <= 0) || (number > 999999) || (isNumeric != true))
+            {
+                Console.WriteLine("Incorrect number, please try again");
+                i = i - 1;
+                continue;
+            }
+            BlueStack.Add(new UnitStack(name, number));
+        }
+
+        Console.Clear();
+        writer.ListOfUnits();
+        List<UnitStack> RedStack = new List<UnitStack>();
+        Console.WriteLine("Red turn to make army");
+        for (int i = 0; i < 6; i++)
+        {
+            CorrectName = false;
+            Console.WriteLine(i);
+            Console.WriteLine("Write a name of a minion or \"quit\" to end ");
+            name = Console.ReadLine();
+            if (name == "quit")
+            {
+                if (i == 0)
+                {
+                    Console.WriteLine("Please, at least 1 stack");
+                    i = i - 1;
+                    continue;
+                }
+                break;
+            }
+
+            foreach (string s in list)
+            {
+                if (s.ToUpper() == name.ToUpper())
+                {
+                    CorrectName = true;
+                }
+            }
+            if (CorrectName == false)
+            {
+                Console.WriteLine("Incorrect name, plase try again");
+                i = i - 1;
+                continue;
+            }
+            Console.WriteLine("Now write amount");
+            StrNumber = Console.ReadLine();
+             isNumeric = int.TryParse(StrNumber, out number);
+            if (((number <= 0) || (number > 999999)) && (isNumeric != true))
+            {
+                Console.WriteLine("Incorrect number, please try again");
+                i = i - 1;
+                continue;
+            }
+            RedStack.Add(new UnitStack(name, number));
+        }
+
+        ArmyClass RedArmy = new ArmyClass(BlueStack);
+        ArmyClass BlueArmy = new ArmyClass(RedStack);
+
+        Battle GAME = new Battle(BlueArmy, RedArmy);
+
+
+        writer.ShowLog();
+        Console.WriteLine("Blue army");
+        writer.Show(BlueArmy);
+        Console.WriteLine("REd army");
+        writer.Show(RedArmy);
     }
 }
